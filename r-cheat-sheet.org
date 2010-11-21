@@ -1,0 +1,13 @@
+* Data Types
+  - Strings, delimited with ' or "
+  - Functions
+    function(arg1, ...) { expr ... }
+* Load program from file
+  source('path/to/file.r')
+* Set working directory
+  setwd("path/to/dir")
+
+* Bindings
+  name = value
+  OR
+  name <- value
