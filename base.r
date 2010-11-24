@@ -1,18 +1,17 @@
 # Basic definitions used by all LTPP code
 
-# colVars(Matrix) -> Matrix
-# Compute the variance of each column in x
 #
-# Taken from https://stat.ethz.ch/pipermail/r-help/2002-March/019606.html
-colVars = function(x, na.rm=FALSE, dims=1, unbiased=TRUE, SumSquares=FALSE,
-                    twopass=FALSE) {
-  if (SumSquares) return(colSums(x^2, na.rm, dims))
-  N <- colSums(!is.na(x), FALSE, dims)
-  Nm1 <- if (unbiased) N-1 else N
-  if (twopass) {x <- if (dims==length(dim(x))) x - mean(x, na.rm=na.rm) else
-                     sweep(x, (dims+1):length(dim(x)), colMeans(x,na.rm,dims))}
-  (colSums(x^2, na.rm, dims) - colSums(x, na.rm, dims)^2/N) / Nm1
-}
+# Some variables that control global behaviour
+#
+
+# Number of folds in cross-validation
+nFolds = 10
+
+
+
+#
+# Function definitions
+#
 
 # normalise(Matrix, Vector) -> Matrix
 # Scale data to zero mean and unit standard deviation
@@ -47,4 +46,17 @@ test = function(predict, data, dependentCol) {
 
   # Count the number of misclassifications
   sum((actual - thresholded)^2)
+}
+
+# empiricalRisk(Vectorof{0,1}, Vectorof[0,1]) -> Natural
+#
+# Computes the empirical risk under the 0-1 Loss. Assumes
+# true is a vector of binary values, and predictions is a
+# vector of probabilities. Predictions is thresholded at 0.5
+empiricalRisk = function(target, predictions) {
+  # Convert to an array of binary variables, where true (=1) if prediction > 0.5
+  thresholded = predictions > 0.5
+  # Count the number of misclassifications
+  risk = sum((target - thresholded)^2)
+  risk
 }

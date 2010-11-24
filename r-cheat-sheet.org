@@ -2,6 +2,9 @@
   - Strings, delimited with ' or "
   - Functions
     function(arg1, ...) { expr ... }
+** Vectors
+   - Construct with c(elt1, ...)
+*** Indexing
 * Load program from file
   source('path/to/file.r')
 * Set working directory

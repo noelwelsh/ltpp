@@ -1,11 +1,21 @@
 # Baseline results: logistic regression
 
+require('boot')
+
 source('base.r')
 source('data.r')
 
-# TODO: Cross validation or at least testing/training split
+trafficFormula = RUT_FAILURE ~ TMS_AADT + Total_pc_heavy + CumESA_Base_millions
 
-formula = RUT_FAILURE ~ TMS_AADT + Total_pc_heavy + CumESA_Base_millions
+# logisticRegression(Formula, Data.Frame)
+#
+# Computes the empirical risk under the 0-1 Loss for a logistic regression model
+logisticRegression = function(formula, data) {
+  model  = glm(formula, family=binomial(link='logit'), trafficData)
+  errors = cv.glm(trafficData, model, empiricalRisk, nFolds)
+  errors$delta[2] * nFolds
+}
 
-model = glm(formula, family=binomial(link='logit'), trafficData)
-errors = test(function(data) { predict(model, data, type='response') }, trafficData, 1)
+trafficLogisticRegression = function() {
+  logisticRegression(trafficFormula, trafficData)
+}
